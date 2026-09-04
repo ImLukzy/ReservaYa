@@ -149,6 +149,92 @@ credenciales reales al repositorio.
 4. Abrir `http://localhost:4321` para la experiencia pública o
    `http://localhost:3000` para el panel.
 
+## Guía rápida para usuarios y colaboradores
+
+Esta es la forma recomendada de descargar y ejecutar el proyecto desde cero.
+Los comandos funcionan en PowerShell. En CMD, reemplaza `Copy-Item` por
+`copy`.
+
+### Descargar la versión actual
+
+```powershell
+cd C:\Users\anton\Downloads
+git clone -b agents/technical-audit-refactor-reservaya-to-canchasgo https://github.com/ImLukzy/ReservaYa.git ReservaYa-actual
+cd ReservaYa-actual
+```
+
+### Instalar y levantar Astro
+
+Abre una terminal:
+
+```powershell
+cd C:\Users\anton\Downloads\ReservaYa-actual\reservaya-frontend-astro
+npm install
+Copy-Item .env.example .env
+npm run dev
+```
+
+Visita `http://localhost:4321`.
+
+### Instalar y levantar Next.js
+
+Abre una segunda terminal:
+
+```powershell
+cd C:\Users\anton\Downloads\ReservaYa-actual\reservaya-nextjs-api
+npm install
+Copy-Item .env.example .env
+```
+
+Edita `.env` y configura como mínimo:
+
+```env
+DATABASE_URL="tu_conexion_postgresql"
+DATABASE_URL_UNPOOLED="tu_conexion_directa"
+JWT_SECRET="una_clave_de_al_menos_32_caracteres"
+```
+
+Después inicia el panel:
+
+```powershell
+npm run dev
+```
+
+Visita `http://localhost:3000`.
+
+### Instalar y levantar la API
+
+Abre una tercera terminal:
+
+```powershell
+cd C:\Users\anton\Downloads\ReservaYa-actual\reservaya-nextjs-api\backend\ReservaFacil.Api
+dotnet run
+```
+
+La API estará disponible en `http://localhost:5000`.
+
+### Orden de inicio
+
+1. API .NET en `http://localhost:5000`.
+2. Panel Next.js en `http://localhost:3000`.
+3. Sitio Astro en `http://localhost:4321`.
+
+Usa `npm install`, no `npm run install`. El comando `npm install` genera
+automáticamente el cliente Prisma. Si Astro intenta abrirse en `4322`, cierra
+el servidor Astro anterior con `Ctrl+C` y vuelve a ejecutar `npm run dev`; solo
+debe existir una instancia del frontend.
+
+### Detener los servidores
+
+En cada terminal donde haya un servidor activo, presiona:
+
+```text
+Ctrl+C
+```
+
+No cierres procesos al azar desde el Administrador de tareas: primero detén la
+terminal que inició el servidor para evitar puertos ocupados.
+
 ## Rutas principales
 
 ### Astro B2C
