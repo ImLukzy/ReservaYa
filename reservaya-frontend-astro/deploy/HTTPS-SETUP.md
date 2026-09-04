@@ -2,11 +2,11 @@
 
 1. Build static site
    - npm run build
-2. Copy dist to /var/www/educlook/dist
+2. Copy dist to /var/www/reservaya/dist
 3. Install and enable nginx
 4. Use deploy/nginx-https.conf as site config
 5. Issue certificates with certbot
-   - certbot --nginx -d educlook.com -d www.educlook.com
+   - certbot --nginx -d reservaya.com -d www.reservaya.com
 6. Reload nginx
    - systemctl reload nginx
 
