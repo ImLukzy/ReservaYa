@@ -75,11 +75,14 @@ Nunca deben almacenarse tokens en `localStorage` ni publicarse secretos.
 | Panel Next.js | http://localhost:3000 |
 | API ASP.NET Core | http://localhost:5000 |
 
-## Instalación local
+## Instalación y ejecución local
 
-Requisitos: Node.js, .NET SDK 10 y PostgreSQL/Neon configurado.
+Requisitos: Node.js, .NET SDK 10 y PostgreSQL/Neon configurado. Ejecuta
+`npm install` (no `npm run install`) dentro de cada aplicación Node.
 
-### Sitio público Astro
+### 1. Preparar el frontend Astro
+
+En una terminal:
 
 ```powershell
 cd reservaya-frontend-astro
@@ -87,6 +90,10 @@ npm install
 Copy-Item .env.example .env
 npm run dev
 ```
+
+Astro debe quedar en `http://localhost:4321`. Si muestra `4322`, ya hay otro
+servidor Astro activo: detén el proceso anterior con `Ctrl+C` y vuelve a
+ejecutar el comando. No ejecutes dos copias del frontend.
 
 Variables principales:
 
@@ -96,7 +103,9 @@ PUBLIC_RESERVAYA_APP_URL=http://localhost:3000
 PUBLIC_GA_ID=
 ```
 
-### Panel Next.js
+### 2. Preparar el panel Next.js
+
+En una segunda terminal:
 
 ```powershell
 cd reservaya-nextjs-api
@@ -105,18 +114,40 @@ Copy-Item .env.example .env
 npm run dev
 ```
 
-Configura `JWT_SECRET`, `DATABASE_URL`, `DATABASE_URL_UNPOOLED` y las variables
-de origen/API indicadas en `.env.example`.
+Next.js debe quedar en `http://localhost:3000`. Configura en `.env`
+`JWT_SECRET` (mínimo 32 caracteres), `DATABASE_URL`,
+`DATABASE_URL_UNPOOLED` y las variables de origen/API indicadas en
+`.env.example`.
 
-### API .NET
+`npm install` genera el cliente Prisma automáticamente. Para generar el
+cliente manualmente:
+
+```powershell
+npx prisma generate
+```
+
+Las migraciones y el seed sí requieren una conexión PostgreSQL válida.
+
+### 3. Levantar la API ASP.NET Core
+
+En una tercera terminal:
 
 ```powershell
 cd reservaya-nextjs-api/backend/ReservaFacil.Api
 dotnet run
 ```
 
-La API carga su configuración desde el entorno y/o el archivo `.env` del
-proyecto `reservaya-nextjs-api`. No subas credenciales reales al repositorio.
+La API debe quedar en `http://localhost:5000`. Carga su configuración desde el
+entorno y/o el archivo `.env` del proyecto `reservaya-nextjs-api`. No subas
+credenciales reales al repositorio.
+
+### Orden recomendado
+
+1. Levantar la API en `:5000`.
+2. Levantar Next.js en `:3000`.
+3. Levantar Astro en `:4321`.
+4. Abrir `http://localhost:4321` para la experiencia pública o
+   `http://localhost:3000` para el panel.
 
 ## Rutas principales
 
