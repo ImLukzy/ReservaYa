@@ -18,6 +18,7 @@ import {
   Tag,
   HandCoins,
   Building2,
+  User,
   Users,
   Star,
   Settings,
@@ -105,13 +106,14 @@ const GROUPS_ADMIN: NavGroup[] = [
 
 const GROUPS_USUARIO: NavGroup[] = [
   {
-    label: 'Operación',
+    label: '',
     items: [
       { href: '/dashboard', label: 'Inicio', icon: LayoutDashboard },
       { href: '/dashboard/reservas', label: 'Mis Reservas', icon: CalendarDays },
       { href: '/dashboard/canchas', label: 'Canchas', icon: Trophy },
-      { href: '/dashboard/mi-partido', label: 'Mi partido', icon: ScanLine },
-      { href: '/dashboard/perfil', label: 'Mi perfil', icon: Users },
+      { href: '/dashboard/partidos', label: 'Mis partidos', icon: Users },
+      { href: '/dashboard/mi-partido', label: 'Próxima reserva', icon: ScanLine },
+      { href: '/dashboard/perfil', label: 'Mi perfil', icon: User },
     ],
   },
 ];
@@ -267,7 +269,7 @@ export function Sidebar({ rol, nombre, email }: SidebarProps) {
           {groups.map((group, gi) => (
             <div key={`${group.label || 'g'}-${gi}`} className="mt-3 border-t border-white/10 pt-3">
               {group.label && (
-                <p className="mb-2 px-6 font-display text-sm font-semibold uppercase tracking-wide text-niebla">
+                <p className="mb-2 px-6 font-display text-sm font-semibold text-niebla">
                   {group.label}
                 </p>
               )}
