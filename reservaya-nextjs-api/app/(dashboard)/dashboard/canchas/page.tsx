@@ -2,7 +2,10 @@ import Link from 'next/link'
 import * as api from '@/lib/api'
 import { CanchaCard } from '@/components/features/CanchaCard'
 import { EmptyState } from '@/components/ui/EmptyState'
-import { SearchX } from 'lucide-react'
+import { Input } from '@/components/ui/Input'
+import { Select } from '@/components/ui/Select'
+import { CalendarDays, Search, SearchX } from 'lucide-react'
+import { tipoCanchaLabel } from '@/components/features/etiquetasJugador'
 import type { ResultadoBusqueda } from '@/lib/api'
 
 export const dynamic = 'force-dynamic'
@@ -66,14 +69,11 @@ export default async function CanchasPage({
   const resultados = resultado.canchas
 
   const conHorario = Boolean(p.fecha && p.horaInicio && p.horaFin)
-  const inputCls =
-    'w-full rounded-md border border-cal bg-tiza px-3 py-2 text-sm text-basalto placeholder:text-niebla focus:border-cesped focus:outline-none focus:ring-1 focus:ring-cesped'
-  const labelCls = 'mb-1.5 block text-xs font-semibold uppercase tracking-wider text-pizarra'
 
   return (
     <div className="mx-auto max-w-5xl">
       <div className="mb-8 border-b border-cal pb-4">
-        <p className="font-display text-xs font-bold uppercase tracking-wider text-cesped-hondo">Vitrina de canchas</p>
+        <p className="font-display text-xs font-bold text-cesped-hondo">Vitrina de canchas</p>
         <h1 className="mt-1 font-display text-3xl font-bold tracking-tight text-basalto">Buscar canchas</h1>
         <p className="mt-1 text-sm text-pizarra">
           Filtra por local, dueño o lugar y revisa disponibilidad por fecha y hora.
@@ -87,16 +87,16 @@ export default async function CanchasPage({
       >
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <div className="sm:col-span-2 lg:col-span-1">
-            <label htmlFor="f-q" className={labelCls}>Texto de búsqueda</label>
-            <input
+            <Input
               id="f-q"
               name="q"
+              etiqueta="Texto de búsqueda"
+              icon={Search}
               defaultValue={p.q ?? ''}
               placeholder="Nombre de cancha o sede…"
               maxLength={50}
               autoComplete="off"
               list="sugerencias-canchas"
-              className={inputCls}
             />
             <datalist id="sugerencias-canchas">
               {opciones.sugerencias.map((s) => (
@@ -104,97 +104,74 @@ export default async function CanchasPage({
               ))}
             </datalist>
           </div>
-          <div>
-            <label htmlFor="f-distrito" className={labelCls}>Distrito</label>
-            <select id="f-distrito" name="distrito" defaultValue={p.distrito ?? ''} className={inputCls}>
-              <option value="">Todos los distritos</option>
-              {opciones.distritos.map((d) => (
+          <Select id="f-distrito" name="distrito" etiqueta="Distrito" defaultValue={p.distrito ?? ''}>
+            <option value="">Todos los distritos</option>
+            {opciones.distritos.map((d) => (
+              <option key={d} value={d}>{d}</option>
+            ))}
+          </Select>
+          <Select id="f-ciudad" name="ciudad" etiqueta="Ciudad" defaultValue={p.ciudad ?? 'Arequipa'}>
+            {opciones.ciudades.length === 0 ? (
+              <option value="Arequipa">Arequipa</option>
+            ) : (
+              opciones.ciudades.map((d) => (
                 <option key={d} value={d}>{d}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="f-ciudad" className={labelCls}>Ciudad</label>
-            <select id="f-ciudad" name="ciudad" defaultValue={p.ciudad ?? 'Arequipa'} className={inputCls}>
-              {opciones.ciudades.length === 0 ? (
-                <option value="Arequipa">Arequipa</option>
-              ) : (
-                opciones.ciudades.map((d) => (
-                  <option key={d} value={d}>{d}</option>
-                ))
-              )}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="f-dueno" className={labelCls}>Dueño</label>
-            <select id="f-dueno" name="duenoId" defaultValue={p.duenoId ?? ''} className={inputCls}>
-              <option value="">Todos los dueños</option>
-              {opciones.duenos.map((d) => (
-                <option key={d.id} value={d.id}>{d.nombre}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="f-complejo" className={labelCls}>Complejo / Sede</label>
-            <select id="f-complejo" name="complejoId" defaultValue={p.complejoId ?? ''} className={inputCls}>
-              <option value="">Todos los locales</option>
-              {opciones.complejos.map((d) => (
-                <option key={d.id} value={d.id}>{d.nombre} · {d.distrito}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="f-tipo" className={labelCls}>Deporte</label>
-            <select id="f-tipo" name="tipo" defaultValue={p.tipo ?? ''} className={inputCls}>
-              <option value="">Todos los deportes</option>
-              {TIPOS.map((t) => (
-                <option key={t} value={t}>{t}</option>
-              ))}
-            </select>
-          </div>
+              ))
+            )}
+          </Select>
+          <Select id="f-dueno" name="duenoId" etiqueta="Dueño" defaultValue={p.duenoId ?? ''}>
+            <option value="">Todos los dueños</option>
+            {opciones.duenos.map((d) => (
+              <option key={d.id} value={d.id}>{d.nombre}</option>
+            ))}
+          </Select>
+          <Select id="f-complejo" name="complejoId" etiqueta="Complejo / Sede" defaultValue={p.complejoId ?? ''}>
+            <option value="">Todos los locales</option>
+            {opciones.complejos.map((d) => (
+              <option key={d.id} value={d.id}>{d.nombre} · {d.distrito}</option>
+            ))}
+          </Select>
+          <Select id="f-tipo" name="tipo" etiqueta="Deporte" defaultValue={p.tipo ?? ''}>
+            <option value="">Todos los deportes</option>
+            {TIPOS.map((t) => (
+              <option key={t} value={t}>{tipoCanchaLabel[t] ?? t}</option>
+            ))}
+          </Select>
         </div>
 
         <details className="mt-4 rounded-lg border border-cal bg-piedra/40 px-4 py-3" open={conHorario}>
-          <summary className="cursor-pointer font-display text-sm font-semibold text-basalto">
-            📅 Horario y fecha de juego (opcional, calcula cotización en tiempo real)
+          <summary className="flex cursor-pointer items-center gap-2 font-display text-sm font-semibold text-basalto">
+            <CalendarDays className="h-4 w-4 shrink-0 text-pizarra" strokeWidth={2} aria-hidden="true" />
+            Horario y fecha de juego (opcional, calcula cotización en tiempo real)
           </summary>
           <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <div>
-              <label htmlFor="f-fecha" className={labelCls}>Fecha</label>
-              <input
-                id="f-fecha"
-                name="fecha"
-                type="date"
-                defaultValue={p.fecha ?? ''}
-                min={new Date().toISOString().split('T')[0]}
-                className={inputCls}
-              />
-            </div>
-            <div>
-              <label htmlFor="f-hi" className={labelCls}>Hora desde</label>
-              <select id="f-hi" name="horaInicio" defaultValue={p.horaInicio ?? ''} className={inputCls}>
-                <option value="">Cualquiera</option>
-                {HORAS.slice(0, -1).map((h) => (
-                  <option key={h.value} value={h.value}>{h.label}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="f-hf" className={labelCls}>Hora hasta</label>
-              <select id="f-hf" name="horaFin" defaultValue={p.horaFin ?? ''} className={inputCls}>
-                <option value="">Cualquiera</option>
-                {HORAS.slice(1).map((h) => (
-                  <option key={h.value} value={h.value}>{h.label}</option>
-                ))}
-              </select>
-            </div>
+            <Input
+              id="f-fecha"
+              name="fecha"
+              type="date"
+              etiqueta="Fecha"
+              defaultValue={p.fecha ?? ''}
+              min={new Date().toISOString().split('T')[0]}
+            />
+            <Select id="f-hi" name="horaInicio" etiqueta="Hora desde" defaultValue={p.horaInicio ?? ''}>
+              <option value="">Cualquiera</option>
+              {HORAS.slice(0, -1).map((h) => (
+                <option key={h.value} value={h.value}>{h.label}</option>
+              ))}
+            </Select>
+            <Select id="f-hf" name="horaFin" etiqueta="Hora hasta" defaultValue={p.horaFin ?? ''}>
+              <option value="">Cualquiera</option>
+              {HORAS.slice(1).map((h) => (
+                <option key={h.value} value={h.value}>{h.label}</option>
+              ))}
+            </Select>
           </div>
         </details>
 
         <div className="mt-5 flex flex-wrap items-center gap-3">
           <button
             type="submit"
-            className="rounded-md bg-cesped px-6 py-2.5 font-display text-sm font-bold text-grafito transition hover:bg-cesped-hover"
+            className="rounded-md bg-cesped px-6 py-2.5 font-display text-sm font-bold text-tiza transition hover:bg-cesped-hover"
           >
             Buscar canchas
           </button>
@@ -242,7 +219,7 @@ export default async function CanchasPage({
 
       {!error && resultados.length > 0 && (
         <>
-          <p className="mb-4 font-display tabular-nums text-xs font-semibold uppercase tracking-wider text-pizarra">
+          <p className="mb-4 font-display tabular-nums text-xs font-semibold text-pizarra">
             {resultado.limiteAplicado
               ? `Mostrando ${resultados.length} de ${resultado.total} canchas disponibles: usa los filtros para acotar`
               : `${resultado.total} cancha${resultado.total === 1 ? '' : 's'} encontrada${resultado.total === 1 ? '' : 's'}`}
