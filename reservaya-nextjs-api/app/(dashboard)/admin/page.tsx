@@ -1,12 +1,13 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { Bell, ChevronRight, CircleHelp, HeartHandshake, Plus, Sparkles } from 'lucide-react';
+import { ChevronRight, HeartHandshake, ListChecks, Plus } from 'lucide-react';
 import * as api from '@/lib/api';
 import type { DashboardAdmin } from '@/lib/api';
 import { getSession } from '@/lib/session';
 import { getComplejos } from '@/lib/b2b-api';
 import { NovedadCard } from '@/components/b2b/DashboardWidgets';
 import { WhatsAppFloat } from '@/components/ui/WhatsAppFloat';
+import { whatsappUrl, whatsappVisible } from '@/lib/whatsapp';
 import { crearCarga } from '@/lib/carga';
 import { AvisoCarga } from '@/components/ui/AvisoCarga';
 
@@ -90,23 +91,9 @@ export default async function AdminPage() {
           <p className="text-sm text-[#64748B] capitalize">{fechaLarga} De {ahora.getFullYear()}</p>
         </div>
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            aria-label="Notificaciones"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-[#E7E5E4] bg-white text-[#64748B]"
-          >
-            <Bell size={18} strokeWidth={1.85} />
-          </button>
-          <button
-            type="button"
-            aria-label="Ayuda"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-[#E7E5E4] bg-white text-sm font-bold text-[#64748B]"
-          >
-            <CircleHelp size={18} strokeWidth={1.85} />
-          </button>
           <Link
             href="/admin/agenda"
-            className="flex items-center gap-1.5 rounded-xl bg-[#22C55E] px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-[#16A34A] hover:shadow-md active:scale-[0.98]"
+            className="flex items-center gap-1.5 rounded-xl bg-[#22C55E] px-4 py-2.5 text-sm font-bold text-[#060C08] transition-all hover:bg-[#16A34A] hover:shadow-md active:scale-[0.98]"
           >
             <Plus size={18} strokeWidth={2.5} /> Reserva manual
           </Link>
@@ -132,14 +119,16 @@ export default async function AdminPage() {
             </p>
           </div>
         </div>
-        <a
-          href="https://wa.me/51907425900"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="relative shrink-0 rounded-xl bg-[#22C55E] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#16A34A]"
-        >
-          💬 Escríbenos · 907 425 900
-        </a>
+        {whatsappUrl() && (
+          <a
+            href={whatsappUrl() ?? undefined}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative shrink-0 rounded-xl bg-[#22C55E] px-4 py-2.5 text-sm font-bold text-[#060C08] transition hover:bg-[#16A34A]"
+          >
+            Escríbenos por WhatsApp · {whatsappVisible()}
+          </a>
+        )}
       </div>
 
       {/* Checklist */}
@@ -148,7 +137,7 @@ export default async function AdminPage() {
         className="mt-3 flex items-center gap-3 rounded-xl border border-[#E7E5E4] bg-white p-4 shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition hover:border-[#22C55E]"
       >
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#DCFCE7] text-[#15803D]">
-          <Sparkles size={18} strokeWidth={1.85} />
+          <ListChecks size={18} strokeWidth={1.85} />
         </span>
         <span className="min-w-0 flex-1">
           <strong className="block text-sm font-bold text-[#101613]">
@@ -226,9 +215,9 @@ export default async function AdminPage() {
         </div>
       </div>
 
-      {/* Tu día + AI */}
-      <div className="mt-4 grid gap-4 lg:grid-cols-3">
-        <div className="rounded-2xl border border-[#E7E5E4] bg-white p-5 lg:col-span-2">
+      {/* Tu día */}
+      <div className="mt-4">
+        <div className="rounded-2xl border border-[#E7E5E4] bg-white p-5">
           <p className="text-[11px] font-bold tracking-[0.14em] text-[#64748B]">TU DÍA DE HOY</p>
           <p className="mt-1 text-xl font-black text-[#0F172A]">
             {reservasHoy.length} <span className="text-sm font-semibold text-[#64748B]">reservas</span>
@@ -268,24 +257,6 @@ export default async function AdminPage() {
               <span className="h-2 w-2 rounded-full bg-[#E7E5E4]" /> Libre
             </span>
           </div>
-        </div>
-        <div className="relative overflow-hidden rounded-2xl bg-black p-6 text-center text-white">
-          <div className="pointer-events-none absolute -top-10 left-1/2 h-40 w-64 -translate-x-1/2 rounded-full bg-[#22C55E]/25 blur-3xl" />
-          <span className="rounded-full border border-[#22C55E]/40 px-2.5 py-1 text-[10px] font-bold tracking-wider text-[#4ADE80]">
-            ✨ PRÓXIMAMENTE
-          </span>
-          <p className="mt-3 text-2xl font-black">
-            Reserva<span className="text-[#4ADE80]">Ya</span> AI
-          </p>
-          <p className="mx-auto mt-2 max-w-[220px] text-xs text-white/55">
-            Pregúntale por tus números y te responde al toque.
-          </p>
-          <Link
-            href="/admin/reportes"
-            className="mt-5 block rounded-xl border border-white/15 py-2.5 text-sm font-semibold text-white/80 transition hover:bg-white/10 hover:text-white"
-          >
-            Explorar reportes →
-          </Link>
         </div>
       </div>
 

@@ -178,7 +178,7 @@ export function ReportesPanel({
             onClick={exportarExcel}
             className="flex h-9 items-center gap-1.5 rounded-xl bg-[#0F172A] px-4 text-sm font-bold text-white transition-all hover:bg-black active:scale-[0.98]"
           >
-            <Download size={16} /> Exportar Excel
+            <Download size={16} /> Exportar CSV
           </button>
         </div>
       </div>
@@ -209,7 +209,7 @@ export function ReportesPanel({
             title={`Sin reservas en ${mesInfo.largo}`}
             description="Cuando registres reservas verás aquí tus ingresos, ocupación y mejores clientes."
             action={
-              <Link href="/admin/agenda" className="rounded-xl bg-[#22C55E] px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-[#16A34A]">
+              <Link href="/admin/agenda" className="rounded-xl bg-[#22C55E] px-4 py-2.5 text-sm font-bold text-[#060C08] transition-all hover:bg-[#16A34A]">
                 Crear reserva manual
               </Link>
             }

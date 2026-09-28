@@ -96,12 +96,20 @@ export default function LoginPage() {
               className="auth-input w-full px-4 py-3 rounded-lg focus:outline-none transition"
               placeholder="••••••••"
             />
+            <p className="mt-2 text-right">
+              <a
+                href={`${publicAppUrl.replace(/\/$/, '')}/forgot-password`}
+                className="auth-link text-sm font-medium hover:underline"
+              >
+                ¿Olvidaste tu contraseña?
+              </a>
+            </p>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#22C55E] hover:bg-[#16A34A] disabled:bg-[#86EFAC] text-white font-semibold py-3 rounded-lg transition duration-200 shadow-lg shadow-green-900/25"
+            className="w-full bg-[#22C55E] hover:bg-[#16A34A] disabled:bg-[#86EFAC] text-[#060C08] font-semibold py-3 rounded-lg transition duration-200 shadow-lg shadow-green-900/25"
           >
             {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
           </button>

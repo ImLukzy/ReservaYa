@@ -9,13 +9,55 @@
   --accent-warn: #eab308;
   --sidebar: #060c08;
   --border-soft: #e7e5e4;
+
+  /* «Tablero de cancha» (spec 20/21). Neutros iguales a la landing; el acento del
+     panel es #22C55E con texto grafito (8.66:1), nunca texto blanco (spec 14). */
+  --sillar: #f3f4f1;        /* fondo de página */
+  --piedra: #e7e9e4;        /* hover y estados neutros; pizarra encima 4.9 */
+  --tiza: #ffffff;          /* superficies */
+  --cal: #d6dbd3;           /* líneas de estructura, nunca texto */
+  --borde: #8a948e;         /* borde de controles, ≥ 3:1 */
+  --basalto: #1f2a24;       /* texto principal; 13.4 sobre sillar */
+  --pizarra: #5a6660;       /* texto secundario; 5.43 sobre sillar */
+  --grafito: #060c08;       /* sidebar y texto sobre césped */
+  --niebla: #a9b3ad;        /* texto secundario sobre grafito; 9.2 */
+  --cesped: #22c55e;        /* acento; grafito encima 8.66 */
+  --cesped-hover: #16a34a;  /* grafito encima 5.98 */
+  --cesped-hondo: #116a3c;  /* texto verde; 6.0 sobre sillar */
+  --cesped-suave: #e3f1e8;  /* fondo de «libre»; cesped-hondo encima 5.7 */
+  --sol: #f0b429;           /* avisos sobre grafito; 10.6 */
+  --error: #b42318;         /* 6.57 sobre tiza */
+  --error-hondo: #912018;   /* hover de peligro */
+  --error-suave: #fdecea;   /* error encima 5.75 */
+  --velo: rgb(31 42 36 / 0.5); /* fondo tras un diálogo */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-sillar: var(--sillar);
+  --color-piedra: var(--piedra);
+  --color-tiza: var(--tiza);
+  --color-cal: var(--cal);
+  --color-borde: var(--borde);
+  --color-basalto: var(--basalto);
+  --color-pizarra: var(--pizarra);
+  --color-grafito: var(--grafito);
+  --color-niebla: var(--niebla);
+  --color-cesped: var(--cesped);
+  --color-cesped-hover: var(--cesped-hover);
+  --color-cesped-hondo: var(--cesped-hondo);
+  --color-cesped-suave: var(--cesped-suave);
+  --color-sol: var(--sol);
+  --color-error: var(--error);
+  --color-error-hondo: var(--error-hondo);
+  --color-error-suave: var(--error-suave);
+  --color-velo: var(--velo);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  /* Barlow las carga app/(dashboard)/layout.tsx con next/font (font-display: swap). */
+  --font-cuerpo: var(--ff-barlow), Arial, sans-serif;
+  --font-display: var(--ff-barlow-condensed), var(--ff-barlow), Arial, sans-serif;
 }
 
 body {
@@ -101,71 +143,6 @@ button:focus-visible,
 a:focus-visible {
   outline: 3px solid rgba(34, 197, 94, 0.45);
   outline-offset: 2px;
-}
-
-/* Shell SaaS claro */
-.dashboard-shell {
-  background: #f8f9fa;
-}
-
-/* Formularios SaaS */
-.form-label {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #334155;
-  margin-bottom: 0.25rem;
-}
-
-.form-input {
-  width: 100%;
-  border-radius: 0.5rem;
-  border: 1px solid #e2e8f0;
-  background: #fff;
-  padding: 0.625rem 0.875rem;
-  font-size: 14px;
-  color: #0f172a;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-
-.form-input::placeholder {
-  color: #94a3b8;
-}
-
-.form-input:focus {
-  border-color: #22C55E;
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18);
-  outline: none;
-}
-
-/* Botón acento con micro-interacción universal */
-.btn-accent {
-  background: #22C55E;
-  color: #fff;
-  transition: all 0.15s;
-}
-
-.btn-accent:hover {
-  background: #16A34A;
-  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
-}
-
-.btn-accent:active {
-  transform: scale(0.98);
-}
-
-/* Drawer lateral */
-@keyframes slide-in-from-right {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
-.animate-in.slide-in-from-right {
-  animation: slide-in-from-right 0.25s ease-out;
 }
 
 @keyframes flash-green {
@@ -254,23 +231,6 @@ a:focus-visible {
   70% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
   100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
 }
-.skeleton {
-  position: relative;
-  overflow: hidden;
-  background: #e9edeb;
-  border-radius: 0.75rem;
-}
-.skeleton::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.75) 50%, transparent 80%);
-  animation: shimmer 1.4s infinite;
-}
-@keyframes shimmer {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(100%); }
-}
 @keyframes modal-backdrop-in {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -300,27 +260,9 @@ a:focus-visible {
   pointer-events: none;
   box-shadow: 0 6px 18px rgba(34, 197, 94, 0.45);
 }
-.slot-block {
-  cursor: grab;
-  transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
-}
-.slot-block:active {
-  cursor: grabbing;
-}
-.slot-block.dragging {
-  opacity: 0.55;
-  transform: scale(1.03);
-  box-shadow: 0 14px 30px rgba(6, 10, 8, 0.3);
-}
-.slot-cell-drop {
-  outline: 2px dashed #22c55e;
-  outline-offset: -2px;
-  background: rgba(34, 197, 94, 0.1) !important;
-}
 @media (prefers-reduced-motion: reduce) {
   .btn-shine::after,
   .badge-live::before,
-  .skeleton::after,
   .modal-backdrop-enter,
   .modal-card-enter,
   .ticket-bump {

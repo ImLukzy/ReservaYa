@@ -4,7 +4,6 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   CalendarDays,
-  CircleHelp,
   Download,
   Plus,
   Trash2,
@@ -245,14 +244,6 @@ export function ReservasPanel({
         <div className="flex items-center gap-2">
           <button
             type="button"
-            aria-label="Ayuda"
-            title="Ayuda"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-[#E7E5E4] bg-white text-sm font-bold text-[#64748B] transition-colors hover:border-[#22C55E] hover:text-[#22C55E]"
-          >
-            <CircleHelp size={18} strokeWidth={1.85} />
-          </button>
-          <button
-            type="button"
             onClick={exportarCSV}
             disabled={visibles.length === 0}
             className="flex items-center gap-1.5 rounded-xl border border-[#E7E5E4] bg-white px-4 py-2.5 text-sm font-bold text-[#0F172A] transition hover:border-[#22C55E] disabled:cursor-not-allowed disabled:opacity-40"
@@ -262,7 +253,7 @@ export function ReservasPanel({
           <button
             type="button"
             onClick={abrirModal}
-            className="flex items-center gap-1.5 rounded-xl bg-[#22C55E] px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-[#16A34A] hover:shadow-md active:scale-[0.98]"
+            className="flex items-center gap-1.5 rounded-xl bg-[#22C55E] px-4 py-2.5 text-sm font-bold text-[#060C08] transition-all hover:bg-[#16A34A] hover:shadow-md active:scale-[0.98]"
           >
             <Plus size={18} strokeWidth={2.5} /> Nueva reserva
           </button>
@@ -332,7 +323,7 @@ export function ReservasPanel({
               <button
                 type="button"
                 onClick={abrirModal}
-                className="flex items-center gap-1.5 rounded-xl bg-[#22C55E] px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-[#16A34A] hover:shadow-md active:scale-[0.98]"
+                className="flex items-center gap-1.5 rounded-xl bg-[#22C55E] px-4 py-2.5 text-sm font-bold text-[#060C08] transition-all hover:bg-[#16A34A] hover:shadow-md active:scale-[0.98]"
               >
                 <Plus size={16} strokeWidth={2.5} /> Nueva reserva
               </button>
@@ -376,7 +367,7 @@ export function ReservasPanel({
                         type="button"
                         disabled={ocupada}
                         onClick={() => cambiarEstado(r.id, 'CONFIRMADA')}
-                        className="rounded-xl bg-[#22C55E] px-3.5 py-2 text-xs font-bold text-white transition-all hover:bg-[#16A34A] disabled:opacity-60"
+                        className="rounded-xl bg-[#22C55E] px-3.5 py-2 text-xs font-bold text-[#060C08] transition-all hover:bg-[#16A34A] disabled:opacity-60"
                       >
                         {ocupada ? 'Guardando…' : 'Confirmar'}
                       </button>
@@ -530,7 +521,7 @@ export function ReservasPanel({
                 type="button"
                 onClick={crearReserva}
                 disabled={guardando}
-                className="flex-1 rounded-xl bg-[#22C55E] py-2.5 text-sm font-bold text-white transition-all hover:bg-[#16A34A] disabled:opacity-60"
+                className="flex-1 rounded-xl bg-[#22C55E] py-2.5 text-sm font-bold text-[#060C08] transition-all hover:bg-[#16A34A] disabled:opacity-60"
               >
                 {guardando ? 'Guardando…' : 'Guardar reserva'}
               </button>
