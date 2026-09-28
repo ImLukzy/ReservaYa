@@ -1,15 +1,23 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import * as api from '@/lib/api'
+import { Badge } from '@/components/ui/Badge'
 import { Countdown } from '@/components/features/Countdown'
 import { formatFecha, formatHora, codigoMostrado, fechaFinReservaEnMs } from '@/lib/utils'
-import { CheckCircle2, Clock, MapPin, Mail, FileCheck, ShieldCheck } from 'lucide-react'
+import { Clock, MapPin, Mail, FileCheck, ShieldCheck } from 'lucide-react'
+import { estadoLabel } from '@/components/features/etiquetasJugador'
+import { proximaDe } from '@/components/features/proximaReserva'
 
 export const dynamic = 'force-dynamic'
 
+const estadoBadge: Record<string, 'green' | 'yellow'> = {
+  CONFIRMADA: 'green',
+  PENDIENTE: 'yellow',
+}
+
 export default async function MiPartidoPage() {
   const reservas = await api.getReservas()
-  const reserva = reservas.find((item) => item.estado === 'CONFIRMADA')
+  const reserva = proximaDe(reservas)
 
   if (!reserva) redirect('/dashboard')
 
@@ -18,11 +26,11 @@ export default async function MiPartidoPage() {
   return (
     <div className="max-w-4xl space-y-8">
       <div>
-        <p className="font-display text-xs font-bold uppercase tracking-wider text-cesped-hondo">
-          Tu reserva confirmada
+        <p className="font-display text-xs font-bold text-cesped-hondo">
+          Tu próxima reserva
         </p>
         <h1 className="font-display text-3xl font-extrabold text-basalto tracking-tight">
-          Mi partido
+          Próxima reserva
         </h1>
         <p className="mt-1 text-sm text-pizarra">
           Detalles operativos y código de acceso para presentar al llegar al complejo deportivo.
@@ -32,10 +40,9 @@ export default async function MiPartidoPage() {
       <div className="grid gap-6 lg:grid-cols-[1.4fr_0.8fr]">
         <section className="rounded-2xl border border-cal bg-tiza p-6 shadow-sm">
           <div className="border-b border-cal pb-4">
-            <span className="inline-flex items-center gap-1.5 rounded-md border border-cesped/30 bg-cesped-suave px-2.5 py-1 text-xs font-bold text-cesped-hondo">
-              <CheckCircle2 className="h-3.5 w-3.5" />
-              Reserva asegurada
-            </span>
+            <Badge variant={estadoBadge[reserva.estado] ?? 'gray'}>
+              Reserva {(estadoLabel[reserva.estado] ?? reserva.estado).toLowerCase()}
+            </Badge>
             <h2 className="mt-3 font-display text-2xl font-black text-basalto tracking-tight">
               {reserva.cancha.nombre}
             </h2>
@@ -65,7 +72,7 @@ export default async function MiPartidoPage() {
           <div className="mt-6 rounded-xl border border-cal bg-piedra p-4">
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4 text-cesped-hondo" />
-              <p className="text-xs font-bold text-basalto uppercase tracking-wide">
+              <p className="text-xs font-bold text-basalto">
                 Tiempo restante de tu reserva
               </p>
             </div>
@@ -77,7 +84,7 @@ export default async function MiPartidoPage() {
 
         <aside className="space-y-4">
           <div className="rounded-2xl border-2 border-dashed border-borde bg-tiza p-6 text-center shadow-sm">
-            <p className="text-xs font-bold uppercase tracking-wider text-pizarra">
+            <p className="text-xs font-bold text-pizarra">
               Código de reserva
             </p>
             <div className="my-4 rounded-xl border border-cal bg-cesped-suave/40 py-4 px-2">
